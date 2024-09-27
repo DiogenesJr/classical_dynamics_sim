@@ -1,5 +1,7 @@
 use crate::vector::Vec2;
 use crate::vector::Vec3;
+use crate::vector::Position2d;
+use crate::vector::Position3d;
 
 #[derive(Debug, Copy, Clone)]
 pub struct Particle2d{
@@ -30,20 +32,24 @@ impl Particle2d {
     pub fn apply_force(&mut self, force:Vec2, mass:f64){
         self.acceleration = force.scale(1.0/mass);
     }
-}
 
-#[derive(Debug, Copy, Clone)]
-pub struct Position2d{
-    pub time:f64,
-    pub position:Vec2,
-}
-
-impl Position2d{
-    pub fn new(time:f64, position:Vec2)->Position2d{
-        Position2d{
-            time,
-            position
+    pub fn execute_2d_simulation(mass:f64, force:Vec2) -> Vec<Position2d> {
+        let dt:f64 = 0.01;
+        let mut particle = Particle2d::new(Vec2::new(0.0, 0.0));
+        let mut position_vector: Vec<Position2d> = Vec::new();
+    
+        particle.apply_force(force, mass);
+    
+        for step in 0..1000{
+            let time = step as f64 * dt;
+    
+            particle.update(dt);
+    
+            let position = Position2d::new(time, particle.position);
+            position_vector.push(position);
         }
+        
+        return position_vector;
     }
 }
 
@@ -76,15 +82,25 @@ impl Particle3d{
     pub fn apply_force(&mut self, force:Vec3, mass:f64){
         self.acceleration = force.scale(1.0/mass);
     }
-}
 
-pub struct Position3d{
-    pub time:f64,
-    pub position:Vec3,
-}
-
-impl Position3d{
-    pub fn new(time:f64, position:Vec3) -> Position3d{
-        Position3d { time: time, position: position }
+    pub fn execute_3d_simulation(mass:f64, force:Vec3) -> Vec<Position3d> {
+        let dt:f64 = 0.01;
+    
+        let mut particle = Particle3d::new(Vec3::new(0.0, 0.0, 0.0));
+        let mut position_vector: Vec<Position3d> = Vec::new();
+    
+        particle.apply_force(force, mass);
+    
+        for step in 0..1000{
+            let time = step as f64 * dt;
+    
+            particle.update(dt);
+            
+            let position = Position3d::new(time, particle.position);
+            position_vector.push(position);
+        }
+    
+        return position_vector;
     }
 }
+
