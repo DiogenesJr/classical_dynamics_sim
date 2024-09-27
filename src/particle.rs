@@ -51,6 +51,13 @@ impl Particle2d {
         
         return position_vector;
     }
+
+    pub fn find_distance(&self, other_particle:&Particle2d) -> f64{
+        let x_distance = (self.position.x - other_particle.position.x);
+        let y_distance = (self.position.y - other_particle.position.y);
+        
+        (x_distance.powi(2) + y_distance.powi(2)).sqrt()
+    }
 }
 
 #[derive(Debug, Copy, Clone)]
@@ -101,6 +108,14 @@ impl Particle3d{
         }
     
         return position_vector;
+    }
+
+    pub fn find_distance(&self, other_particle:&Particle3d) -> f64{
+        let x_distance = self.position.x - other_particle.position.x;
+        let y_distance = self.position.y - other_particle.position.y;
+        let z_distance = self.position.z - other_particle.position.z;
+        
+        (x_distance.powi(2) + y_distance.powi(2) + z_distance.powi(2)).sqrt()
     }
 }
 
