@@ -79,7 +79,7 @@ impl Position3d{
 
     pub fn output_3d_to_console(position_vector:&Vec<Position3d>){
         for position in position_vector{
-            println!("Position: {:?}",position.position)
+            println!("Time: {:?} Position: {:?}", position.time, position.position)
         }
     }
     
@@ -137,7 +137,7 @@ impl Position2d{
     
     pub fn output_2d_to_console(position_vector:&Vec<Position2d>){
         for position in position_vector{
-            println!("Position: {:?}",position.position)
+            println!("Time: {:?} Position: {:?}",position.time, position.position)
         }
     }
 }
