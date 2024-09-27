@@ -1,3 +1,9 @@
+use std::vec::Vec;
+use std::error::Error;
+use std::fs::File;
+use csv::Writer;
+
+
 #[derive(Debug, Copy, Clone)]
 pub struct Vec2{
     pub x:f64,
@@ -22,6 +28,8 @@ impl Vec2{
             y: self.y * scalar
         }
     }
+
+    
 }
 
 #[derive(Debug, Copy, Clone)]
@@ -55,5 +63,81 @@ impl Vec3{
             z: self.z * scalar,
         }
 
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
+pub struct Position3d{
+    pub time:f64,
+    pub position:Vec3,
+}
+
+impl Position3d{
+    pub fn new(time:f64, position:Vec3) -> Position3d{
+        Position3d { time: time, position: position }
+    }
+
+    pub fn output_3d_to_console(position_vector:&Vec<Position3d>){
+        for position in position_vector{
+            println!("Position: {:?}",position.position)
+        }
+    }
+    
+    pub fn output_3d_data_to_csv(file_name:&str, position_vector:&Vec<Position3d>) -> Result<(), Box<dyn Error>>{
+        let file =  File::create(file_name)?;
+    
+        let mut writer = Writer::from_writer(file);
+        writer.write_record(&["time","x","y","z"])?;
+    
+        for position in position_vector{
+            writer.write_record(&[
+                position.time.to_string(),
+                position.position.x.to_string(),
+                position.position.y.to_string(),
+                position.position.z.to_string(),
+            ])?;
+        }
+        writer.flush()?;
+    
+        Ok(())
+    }
+}
+
+#[derive(Debug, Copy, Clone)]
+pub struct Position2d{
+    pub time:f64,
+    pub position:Vec2,
+}
+
+impl Position2d{
+    pub fn new(time:f64, position:Vec2)->Position2d{
+        Position2d{
+            time,
+            position
+        }
+    }
+
+    pub fn output_2d_data_to_csv(file_name:&str, position_vector:&Vec<Position2d>) -> Result<(), Box<dyn Error>>{
+        let file =  File::create(file_name)?;
+    
+        let mut writer = Writer::from_writer(file);
+        writer.write_record(&["time","x","y","z"])?;
+    
+        for position in position_vector{
+            writer.write_record(&[
+                position.time.to_string(),
+                position.position.x.to_string(),
+                position.position.y.to_string(),
+            ])?;
+        }
+        writer.flush()?;
+    
+        Ok(())
+    }
+    
+    pub fn output_2d_to_console(position_vector:&Vec<Position2d>){
+        for position in position_vector{
+            println!("Position: {:?}",position.position)
+        }
     }
 }
